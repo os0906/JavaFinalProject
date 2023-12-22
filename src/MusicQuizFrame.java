@@ -44,18 +44,13 @@ public class MusicQuizFrame extends JFrame {
                dispose();
             }
         });
-        inCorrectPanel.add(inCorrectInfoMessage);
         MyButton retryButton = new MyButton("Retry");
-        inCorrectPanel.add(retryButton);
-        correctPanel.add(infoMessage);
         MyButton nextButton = new MyButton("Next");
-        correctPanel.add(nextButton);
         indexLabel=new JLabel("index : 1/30");
         indexLabel.setHorizontalAlignment(JLabel.CENTER);
         clearLabel.setFont(new Font("Serif",Font.BOLD,30));
         answerField = new JTextField();
         answerField.setPreferredSize(new Dimension(200,20));
-        answerPanel.add(answerField);
 
         answerField.addActionListener(e -> {
             if (MainFrame.musicArr[index].isAnswer(answerField.getText())) {
@@ -100,6 +95,16 @@ public class MusicQuizFrame extends JFrame {
                 ex.printStackTrace();
             }
         });
+        retryButton.addActionListener(e -> handleRetry());
+
+        inCorrectPanel.add(inCorrectInfoMessage);
+        inCorrectPanel.add(retryButton);
+
+        correctPanel.add(infoMessage);
+        correctPanel.add(nextButton);
+
+        answerPanel.add(answerField);
+
         hintPanel.add(replayButton);
         hintPanel.add(randomReplayButton);
         hintPanel.add(hintButton);
@@ -108,16 +113,12 @@ public class MusicQuizFrame extends JFrame {
         add(hintPanel,BorderLayout.CENTER);
         add(answerPanel,BorderLayout.SOUTH);
 
-        retryButton.addActionListener(e -> handleRetry());
+
         setSize(640,810);
         playMusic();
     }
 
     private void handleCorrectAnswer() {
-        if(index==29){
-            handleClear();
-        }
-        else {
             hintPanel.setVisible(false);
             image = new ImageIcon("audio/" + MainFrame.musicArr[index].getName() + ".jpg");
             Image img = image.getImage();
@@ -137,8 +138,6 @@ public class MusicQuizFrame extends JFrame {
                 }
             };
             timer.schedule(task,500);
-
-        }
     }
     private void handleNext() {
         if(index==29){
@@ -204,6 +203,7 @@ public class MusicQuizFrame extends JFrame {
         MainFrame.musicShuffle();
 
         index=0;
+        indexLabel.setText("index : "+ (index + 1) +"/30");
         initializeHint();
 
         repaint();
@@ -221,8 +221,8 @@ public class MusicQuizFrame extends JFrame {
 
     private void handleClear(){
         statusPanel.setVisible(false);
-        answerPanel.setVisible(false);
-        hintPanel.setVisible(false);
+        correctPanel.setVisible(false);
+        albumArt.setVisible(false);
         indexLabel.setVisible(false);
         clip.stop();
         repaint();
