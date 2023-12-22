@@ -6,9 +6,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class IdolQuizFrame extends JFrame {
-    public int index = 0;
-    public static CardLayout idolCl = new CardLayout();
-    public static JPanel idolCards = new JPanel(new CardLayout());
+    private int index = 0;
+    private CardLayout idolCl = new CardLayout();
+    private final JPanel idolCards = new JPanel(new CardLayout());
 
     private final JTextField answerField;
     private final JLabel inCorrectMessage=new JLabel();
@@ -18,15 +18,12 @@ public class IdolQuizFrame extends JFrame {
     private final JPanel answerPanel = new JPanel(new FlowLayout());
     private final JLabel timerLabel;
     private final JLabel indexLabel;
-    private static Timer timer;
+    private Timer timer;
     private final JLabel clearLabel=new JLabel("CLEAR! Thank you for Playing!");
-
     private int count=0;
     public IdolQuizFrame(){
-
         super("idolQuiz");
-        initializeCards();
-        idolCl = (CardLayout) idolCards.getLayout();
+        setLayout(new BorderLayout());
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -36,39 +33,42 @@ public class IdolQuizFrame extends JFrame {
                 CleanCards();
             }
         });
+        initializeCards();
+        idolCl = (CardLayout) idolCards.getLayout();
 
-        inCorrectPanel.add(inCorrectMessage);
         MyButton retry = new MyButton("Retry");
-        inCorrectPanel.add(retry);
         indexLabel=new JLabel("index : 1/50");
-        clearLabel.setFont(new Font("Serif",Font.BOLD,30));
+        timerLabel = new JLabel("Time: " + 5 + "s");
         answerField = new JTextField();
         answerField.setPreferredSize(new Dimension(150,20));
-        answerPanel.add(answerField);
-        timerLabel = new JLabel("Time: " + 5 + "s");
+
         retry.addActionListener(e -> handleRetry());
-        statusPanel.add(timerLabel);
-        statusPanel.add(indexLabel);
-        timerLabel.setHorizontalAlignment(JLabel.LEFT);
-        indexLabel.setHorizontalAlignment(JLabel.RIGHT);
         answerField.addActionListener(e -> {
             if (MainFrame.characterArr[index].isAnswer(answerField.getText())) {
-                    handleCorrectAnswer();
+                handleCorrectAnswer();
             } else {
                 handleIncorrectAnswer();
             }
             answerField.setText(null);
         });
-        setLayout(new BorderLayout());
+
+        clearLabel.setFont(new Font("Serif",Font.BOLD,30));
+        timerLabel.setHorizontalAlignment(JLabel.LEFT);
+        indexLabel.setHorizontalAlignment(JLabel.RIGHT);
+
+        inCorrectPanel.add(retry);
+        inCorrectPanel.add(inCorrectMessage);
+        answerPanel.add(answerField);
+        statusPanel.add(timerLabel);
+        statusPanel.add(indexLabel);
+
         add(answerPanel,BorderLayout.SOUTH);
-        answerField.setVisible(true);
         add(statusPanel,BorderLayout.NORTH);
-        setSize(1000,810);
         add(idolCards,BorderLayout.CENTER);
-        idolCards.setVisible(true);
+        setSize(1000,810);
         initializeTimer();
     }
-    public static void CleanCards(){
+    public void CleanCards(){
         idolCards.removeAll();
         idolCl.removeLayoutComponent(idolCards);
     }
@@ -78,7 +78,7 @@ public class IdolQuizFrame extends JFrame {
         }
         else {
             timer.cancel();
-            IdolQuizFrame.idolCl.next(IdolQuizFrame.idolCards);
+            idolCl.next(idolCards);
             index++;
             indexLabel.setText("index : " + (index + 1) +"/50");
             initializeTimer();
@@ -97,7 +97,7 @@ public class IdolQuizFrame extends JFrame {
         remove(inCorrectPanel);
         answerPanel.setVisible(true);
         timerLabel.setVisible(true);
-        IdolQuizFrame.CleanCards();
+        CleanCards();
         initializeCards();
         index=0;
         repaint();

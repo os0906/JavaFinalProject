@@ -16,5 +16,5 @@ public class Music {
     public boolean isAnswer(String str){
         return Arrays.asList(answer).contains(str);
     }
-
 }
+//Music class including music name, answer field, artist field.

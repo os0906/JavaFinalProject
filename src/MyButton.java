@@ -13,3 +13,4 @@ public class MyButton extends JButton {
         setBorderPainted(false);
     }
 }
+//MyButton class

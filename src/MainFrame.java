@@ -6,10 +6,12 @@ import java.util.List;
 
 
 public class MainFrame extends JFrame {
-public static boolean isQuizOpened=false;
-public static boolean isHelpOpened=false;
-public static Character[] characterArr = new Character[50];
-public static Music[] musicArr = new Music[30];
+    public static boolean isQuizOpened=false;
+    public static boolean isHelpOpened=false;
+    //avoid opening multiple same frame
+    public static Character[] characterArr = new Character[50];
+    public static Music[] musicArr = new Music[30];
+    //character & music arrays
     public MainFrame(){
         super("main");
         InitCharArray();
@@ -28,20 +30,19 @@ public static Music[] musicArr = new Music[30];
             }
         });
         MyButton idolQuizButton = new MyButton("Idol Quiz");
+        idolQuizButton.addActionListener(e -> {
+            if(!isQuizOpened) {
+                IdolQuizFrame idolQuizFrame = new IdolQuizFrame();
+                idolQuizFrame.setVisible(true);
+                isQuizOpened = true;
+            }
+        });
         MyButton helpButton = new MyButton("?");
         helpButton.addActionListener(e->{
             if(!isHelpOpened){
                 HelpFrame helpFrame = new HelpFrame();
                 helpFrame.setVisible(true);
                 isHelpOpened = true;
-            }
-        });
-
-        idolQuizButton.addActionListener(e -> {
-            if(!isQuizOpened) {
-                IdolQuizFrame idolQuizFrame = new IdolQuizFrame();
-                idolQuizFrame.setVisible(true);
-                isQuizOpened = true;
             }
         });
         musicQuizButton.setPreferredSize(new Dimension(200, 200));
@@ -62,9 +63,11 @@ public static Music[] musicArr = new Music[30];
         Collections.shuffle(list);
         list.toArray(musicArr);
     }
+    //shuffling arrays
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MainFrame::new);
     }
+    //main
     private void InitCharArray(){
         characterArr[0]=new Character(new String[]{"AnYujin", "anyujin","yujin","dksdbwls","dbwls"},"IVE, (former)IZ*ONE");
         characterArr[1]=new Character(new String[]{"BaekJiheon", "baekjiheon","jiheon","qorwlgjs","wlgjs"},"fromis_9");
@@ -111,7 +114,7 @@ public static Music[] musicArr = new Music[30];
         characterArr[42]=new Character(new String[]{"EUNHA", "dmsgk","eunha","wjddmsql"},"VIVIZ,GFRIEND");
         characterArr[43]=new Character(new String[]{"TAEYEON", "xodus","rlaxodus","taeyeon"},"Girls' Generation");
         characterArr[44]=new Character(new String[]{"YOON", "dbs","yoon","tlawkdbs"},"STAYC");
-        characterArr[45]=new Character(new String[]{"IRENE", "dkdlfls","irene","qowngus"},"STAYC");
+        characterArr[45]=new Character(new String[]{"SULLYOON", "tjfdbsdk","tjfdbs","sullyoon"},"NMIXX");
         characterArr[46]=new Character(new String[]{"SIEUN", "qkrtldms","tldms","sieun"},"Red Velvet");
         characterArr[47]=new Character(new String[]{"JISOO", "wltn","rlawltn","jisoo"},"BLACKPINK");
         characterArr[48]=new Character(new String[]{"ROSE", "qkrcodud","fhwp","rose"},"BLACKPINK");
@@ -149,6 +152,7 @@ public static Music[] musicArr = new Music[30];
         musicArr[28]= new Music(new String[]{"BLUE MOON","qmffnans"},"HYORIN, CHANGMO");
         musicArr[29]= new Music(new String[]{"Wi Ing Wi Ing","dnldlddnldld"},"HYUKOH");
     }
+    //initialize arrays
 }
 
 

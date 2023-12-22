@@ -8,3 +8,4 @@ public class IdolQuizCardPanel extends JPanel {
         add(new JLabel(new ImageIcon(img)), BorderLayout.CENTER);
     }
 }
+//IdolImage Card Panel

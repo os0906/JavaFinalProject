@@ -17,3 +17,4 @@ public class Character {
         return Arrays.asList(answer).contains(str);
     }
 }
+//character class including name, answer field, group field.

@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 public class MusicQuizFrame extends JFrame {
-    public int index = 0;
+    private int index = 0;
     private final JTextField answerField;
     private final JLabel infoMessage = new JLabel();
     private final JLabel inCorrectInfoMessage = new JLabel();
@@ -21,11 +21,11 @@ public class MusicQuizFrame extends JFrame {
     private final JPanel answerPanel = new JPanel(new FlowLayout());
     private final MyButton replayButton =new MyButton("REPLAY");
     private final MyButton randomReplayButton = new MyButton("RANDOM REPLAY");
-    private final MyButton hintButton = new MyButton("Artist Hint");
+    private final MyButton hintButton = new MyButton("ARTIST HINT");
     private JLabel albumArt;
     private final JLabel indexLabel;
     private JLabel artistLabel= new JLabel();
-    private static Timer timer;
+    private Timer timer;
     private final JLabel clearLabel=new JLabel("CLEAR! Thank you for Playing!");
     private TimerTask task;
     public Clip clip;
@@ -56,6 +56,7 @@ public class MusicQuizFrame extends JFrame {
         answerField = new JTextField();
         answerField.setPreferredSize(new Dimension(200,20));
         answerPanel.add(answerField);
+
         answerField.addActionListener(e -> {
             if (MainFrame.musicArr[index].isAnswer(answerField.getText())) {
                 handleCorrectAnswer();
@@ -102,9 +103,11 @@ public class MusicQuizFrame extends JFrame {
         hintPanel.add(replayButton);
         hintPanel.add(randomReplayButton);
         hintPanel.add(hintButton);
+
         add(indexLabel,BorderLayout.NORTH);
         add(hintPanel,BorderLayout.CENTER);
         add(answerPanel,BorderLayout.SOUTH);
+
         retryButton.addActionListener(e -> handleRetry());
         setSize(640,810);
         playMusic();
@@ -162,20 +165,23 @@ public class MusicQuizFrame extends JFrame {
             };
             timer.schedule(task,500);
         }
-
     }
 
     private void handleIncorrectAnswer() {
         hintPanel.setVisible(false);
+        answerPanel.setVisible(false);
+
         image = new ImageIcon("audio/" + MainFrame.musicArr[index].getName() + ".jpg");
         Image img = image.getImage();
         albumArt = new JLabel(new ImageIcon(img));
         add(albumArt, BorderLayout.CENTER);
+
         timer.cancel();
         clip.stop();
-        answerPanel.setVisible(false);
-        add(inCorrectPanel,BorderLayout.SOUTH);
+
         inCorrectInfoMessage.setText("INCORRECT.. "+MainFrame.musicArr[index].getName()+" - "+MainFrame.musicArr[index].getArtist());
+        add(inCorrectPanel,BorderLayout.SOUTH);
+
         timer = new Timer();
         task = new TimerTask() {
             @Override
@@ -188,15 +194,21 @@ public class MusicQuizFrame extends JFrame {
     }
     private void handleRetry() {
         clip.stop();
+
         remove(albumArt);
         remove(inCorrectPanel);
+
         answerPanel.setVisible(true);
         hintPanel.setVisible(true);
+
         MainFrame.musicShuffle();
+
         index=0;
         initializeHint();
+
         repaint();
         revalidate();
+
         timer = new Timer();
         task = new TimerTask() {
             @Override
@@ -205,7 +217,6 @@ public class MusicQuizFrame extends JFrame {
             }
         };
         timer.schedule(task,500);
-
     }
 
     private void handleClear(){
@@ -243,11 +254,12 @@ public class MusicQuizFrame extends JFrame {
         };
         timer.schedule(task,3000);
     }
+    //3seconds music timer
     private void initializeHint(){
         replayButton.setVisible(true);
         randomReplayButton.setVisible(true);
         hintPanel.remove(2);
         hintPanel.add(hintButton,2);
     }
+    //initialize(setVisible) Hint Buttons after using Hints.
 }
-
